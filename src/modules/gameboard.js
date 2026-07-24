@@ -2,6 +2,7 @@ import { createShip } from "./ship.js";
 
 function createGameboard() {
   const board = Array.from({ length: 10 }, () => Array(10).fill(null));
+  const attacks = [];
   const missedAttacks = [];
   const ships = [];
 
@@ -46,6 +47,15 @@ function createGameboard() {
   };
 
   const receiveAttack = function ([row, column]) {
+    const alreadyAttacked = attacks.some(
+      ([attackedRow, attackedColumn]) =>
+        attackedRow === row && attackedColumn === column,
+    );
+
+    if (alreadyAttacked) return false;
+
+    attacks.push([row, column]);
+
     const ship = getCell([row, column]);
 
     if (ship !== null) {
@@ -53,6 +63,8 @@ function createGameboard() {
     } else {
       missedAttacks.push([row, column]);
     }
+
+    return true;
   };
 
   const areAllShipsSunk = function () {

@@ -149,3 +149,18 @@ test("reports true when all ships have sunk", () => {
 
   expect(gameboard.areAllShipsSunk()).toBe(true);
 });
+
+test("does not attack the same coordinate more than once", () => {
+  const gameboard = createGameboard();
+
+  gameboard.placeShip(2, [4, 4], "horizontal");
+
+  const firstAttack = gameboard.receiveAttack([4, 4]);
+  const repeatedAttack = gameboard.receiveAttack([4, 4]);
+
+  const ship = gameboard.getCell([4, 4]);
+
+  expect(firstAttack).toBe(true);
+  expect(repeatedAttack).toBe(false);
+  expect(ship.isSunk()).toBe(false);
+});
