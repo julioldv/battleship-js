@@ -8,6 +8,9 @@ function createGameboard() {
   };
 
   const placeShip = function (length, [row, column], orientation) {
+    if (column + length - 1 > 9) return false;
+    if (row + length - 1 > 9) return false;
+
     const ship = createShip(length);
 
     for (let offset = 0; offset < length; offset++) {
@@ -17,6 +20,7 @@ function createGameboard() {
         board[row + offset][column] = ship;
       }
     }
+    return true;
   };
 
   return { getCell, placeShip };

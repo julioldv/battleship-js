@@ -10,7 +10,9 @@ test("a new gameboard contains empty cells", () => {
 test("places a ship horizontally", () => {
   const gameboard = createGameboard();
 
-  gameboard.placeShip(3, [0, 0], "horizontal");
+  const wasPlaced = gameboard.placeShip(3, [0, 0], "horizontal");
+
+  expect(wasPlaced).toBe(true);
 
   const placedShip = gameboard.getCell([0, 0]);
 
@@ -34,6 +36,16 @@ test("places a horizontal ship starting from a non-zero column", () => {
   expect(gameboard.getCell([2, 7])).toBe(null);
 });
 
+test("does not place a horizontal ship outside the board", () => {
+  const gameboard = createGameboard();
+
+  const wasPlaced = gameboard.placeShip(3, [0, 8], "horizontal");
+
+  expect(wasPlaced).toBe(false);
+  expect(gameboard.getCell([0, 8])).toBe(null);
+  expect(gameboard.getCell([0, 9])).toBe(null);
+});
+
 test("places a ship vertically", () => {
   const gameboard = createGameboard();
 
@@ -47,4 +59,14 @@ test("places a ship vertically", () => {
 
   expect(gameboard.getCell([1, 4])).toBe(null);
   expect(gameboard.getCell([5, 4])).toBe(null);
+});
+
+test("does not place a vertical ship outside the board", () => {
+  const gameboard = createGameboard();
+
+  const wasPlaced = gameboard.placeShip(3, [8, 0], "vertical");
+
+  expect(wasPlaced).toBe(false);
+  expect(gameboard.getCell([8, 0])).toBe(null);
+  expect(gameboard.getCell([9, 0])).toBe(null);
 });
