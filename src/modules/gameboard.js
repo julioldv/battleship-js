@@ -8,8 +8,23 @@ function createGameboard() {
   };
 
   const placeShip = function (length, [row, column], orientation) {
-    if (column + length - 1 > 9) return false;
-    if (row + length - 1 > 9) return false;
+    // Prevents placing a ship outside the board
+    if (orientation === "horizontal") {
+      if (column + length - 1 > 9) return false;
+    } else if (orientation === "vertical") {
+      if (row + length - 1 > 9) return false;
+    } else {
+      return false;
+    }
+
+    //Prevents ships from overlapping
+    for (let offset = 0; offset < length; offset++) {
+      if (orientation === "horizontal") {
+        if (board[row][column + offset] !== null) return false;
+      } else if (orientation === "vertical") {
+        if (board[row + offset][column] !== null) return false;
+      }
+    }
 
     const ship = createShip(length);
 

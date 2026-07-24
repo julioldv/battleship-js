@@ -70,3 +70,39 @@ test("does not place a vertical ship outside the board", () => {
   expect(gameboard.getCell([8, 0])).toBe(null);
   expect(gameboard.getCell([9, 0])).toBe(null);
 });
+
+test("does not place a ship over another ship", () => {
+  const gameboard = createGameboard();
+
+  gameboard.placeShip(3, [2, 2], "horizontal");
+
+  const originalShip = gameboard.getCell([2, 3]);
+
+  const wasPlaced = gameboard.placeShip(3, [1, 3], "vertical");
+
+  expect(wasPlaced).toBe(false);
+
+  expect(gameboard.getCell([2, 3])).toBe(originalShip);
+  expect(gameboard.getCell([1, 3])).toBe(null);
+  expect(gameboard.getCell([3, 3])).toBe(null);
+});
+
+test("places a horizontal ship on the last row", () => {
+  const gameboard = createGameboard();
+
+  const wasPlaced = gameboard.placeShip(3, [9, 0], "horizontal");
+
+  expect(wasPlaced).toBe(true);
+  expect(gameboard.getCell([9, 0])).not.toBe(null);
+  expect(gameboard.getCell([9, 2])).toBe(gameboard.getCell([9, 0]));
+});
+
+test("places a vertical ship on the last column", () => {
+  const gameboard = createGameboard();
+
+  const wasPlaced = gameboard.placeShip(3, [0, 9], "vertical");
+
+  expect(wasPlaced).toBe(true);
+  expect(gameboard.getCell([0, 9])).not.toBe(null);
+  expect(gameboard.getCell([2, 9])).toBe(gameboard.getCell([0, 9]));
+});
