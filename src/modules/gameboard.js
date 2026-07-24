@@ -3,6 +3,7 @@ import { createShip } from "./ship.js";
 function createGameboard() {
   const board = Array.from({ length: 10 }, () => Array(10).fill(null));
   const missedAttacks = [];
+  const ships = [];
 
   const getCell = function ([row, column]) {
     return board[row][column];
@@ -32,6 +33,7 @@ function createGameboard() {
     }
 
     const ship = createShip(length);
+    ships.push(ship);
 
     for (let offset = 0; offset < length; offset++) {
       if (orientation === "horizontal") {
@@ -52,7 +54,18 @@ function createGameboard() {
       missedAttacks.push([row, column]);
     }
   };
-  return { getCell, getMissedAttacks, placeShip, receiveAttack };
+
+  const areAllShipsSunk = function () {
+    return ships.every((ship) => ship.isSunk());
+  };
+
+  return {
+    getCell,
+    getMissedAttacks,
+    placeShip,
+    receiveAttack,
+    areAllShipsSunk,
+  };
 }
 
 export { createGameboard };

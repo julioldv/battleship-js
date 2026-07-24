@@ -126,3 +126,26 @@ test("records an attack that misses every ship", () => {
 
   expect(gameboard.getMissedAttacks()).toContainEqual([4, 4]);
 });
+
+test("reports false while at least one ship is still afloat", () => {
+  const gameboard = createGameboard();
+
+  gameboard.placeShip(1, [0, 0], "horizontal");
+  gameboard.placeShip(1, [1, 0], "horizontal");
+
+  gameboard.receiveAttack([0, 0]);
+
+  expect(gameboard.areAllShipsSunk()).toBe(false);
+});
+
+test("reports true when all ships have sunk", () => {
+  const gameboard = createGameboard();
+
+  gameboard.placeShip(1, [0, 0], "horizontal");
+  gameboard.placeShip(1, [1, 0], "horizontal");
+
+  gameboard.receiveAttack([0, 0]);
+  gameboard.receiveAttack([1, 0]);
+
+  expect(gameboard.areAllShipsSunk()).toBe(true);
+});
