@@ -2,9 +2,14 @@ import { createShip } from "./ship.js";
 
 function createGameboard() {
   const board = Array.from({ length: 10 }, () => Array(10).fill(null));
+  const missedAttacks = [];
 
   const getCell = function ([row, column]) {
     return board[row][column];
+  };
+
+  const getMissedAttacks = function () {
+    return [...missedAttacks];
   };
 
   const placeShip = function (length, [row, column], orientation) {
@@ -38,7 +43,16 @@ function createGameboard() {
     return true;
   };
 
-  return { getCell, placeShip };
+  const receiveAttack = function ([row, column]) {
+    const ship = getCell([row, column]);
+
+    if (ship !== null) {
+      ship.hit();
+    } else {
+      missedAttacks.push([row, column]);
+    }
+  };
+  return { getCell, getMissedAttacks, placeShip, receiveAttack };
 }
 
 export { createGameboard };

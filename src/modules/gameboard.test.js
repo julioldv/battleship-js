@@ -106,3 +106,23 @@ test("places a vertical ship on the last column", () => {
   expect(gameboard.getCell([0, 9])).not.toBe(null);
   expect(gameboard.getCell([2, 9])).toBe(gameboard.getCell([0, 9]));
 });
+
+test("an attack hits the ship at the given coordinates", () => {
+  const gameboard = createGameboard();
+
+  gameboard.placeShip(1, [4, 4], "horizontal");
+
+  const ship = gameboard.getCell([4, 4]);
+
+  gameboard.receiveAttack([4, 4]);
+
+  expect(ship.isSunk()).toBe(true);
+});
+
+test("records an attack that misses every ship", () => {
+  const gameboard = createGameboard();
+
+  gameboard.receiveAttack([4, 4]);
+
+  expect(gameboard.getMissedAttacks()).toContainEqual([4, 4]);
+});
