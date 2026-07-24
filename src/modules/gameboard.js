@@ -7,11 +7,15 @@ function createGameboard() {
     return board[row][column];
   };
 
-  const placeShip = function (length, [row, column]) {
+  const placeShip = function (length, [row, column], orientation) {
     const ship = createShip(length);
 
     for (let offset = 0; offset < length; offset++) {
-      board[row][column + offset] = ship;
+      if (orientation === "horizontal") {
+        board[row][column + offset] = ship;
+      } else if (orientation === "vertical") {
+        board[row + offset][column] = ship;
+      }
     }
   };
 
