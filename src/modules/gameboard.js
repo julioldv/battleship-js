@@ -46,13 +46,15 @@ function createGameboard() {
     return true;
   };
 
-  const receiveAttack = function ([row, column]) {
-    const alreadyAttacked = attacks.some(
+  const wasAttacked = function ([row, column]) {
+    return attacks.some(
       ([attackedRow, attackedColumn]) =>
         attackedRow === row && attackedColumn === column,
     );
+  };
 
-    if (alreadyAttacked) return false;
+  const receiveAttack = function ([row, column]) {
+    if (wasAttacked([row, column])) return false;
 
     attacks.push([row, column]);
 
@@ -75,6 +77,7 @@ function createGameboard() {
     getCell,
     getMissedAttacks,
     placeShip,
+    wasAttacked,
     receiveAttack,
     areAllShipsSunk,
   };

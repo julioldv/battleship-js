@@ -164,3 +164,12 @@ test("does not attack the same coordinate more than once", () => {
   expect(repeatedAttack).toBe(false);
   expect(ship.isSunk()).toBe(false);
 });
+
+test("reports whether a coordinate has been attacked", () => {
+  const gameboard = createGameboard();
+
+  gameboard.receiveAttack([4, 4]);
+
+  expect(gameboard.wasAttacked([4, 4])).toBe(true);
+  expect(gameboard.wasAttacked([4, 5])).toBe(false);
+});
