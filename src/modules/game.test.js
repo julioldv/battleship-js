@@ -9,3 +9,16 @@ test("a new game sets up both players with ships", () => {
   expect(humanShip).not.toBe(null);
   expect(computerShip).not.toBe(null);
 });
+
+test("processes a human attack against the computer gameboard", () => {
+  const game = createGame();
+
+  const wasAccepted = game.humanAttack([0, 0]);
+
+  expect(wasAccepted).toBe(true);
+  expect(game.computerPlayer.gameboard.getMissedAttacks()).toContainEqual([
+    0, 0,
+  ]);
+
+  expect(game.humanPlayer.gameboard.getMissedAttacks()).toHaveLength(0);
+});
