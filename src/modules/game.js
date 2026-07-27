@@ -15,11 +15,22 @@ function createGame() {
     computerPlayer.randomAttack(humanPlayer.gameboard);
   };
 
+  const getWinner = function () {
+    if (computerPlayer.gameboard.areAllShipsSunk()) {
+      return "human";
+    }
+    if (humanPlayer.gameboard.areAllShipsSunk()) {
+      return "computer";
+    }
+    return null;
+  };
+
   return {
     humanPlayer,
     computerPlayer,
     humanAttack,
     computerAttack,
+    getWinner,
   };
 }
 

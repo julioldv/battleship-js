@@ -38,3 +38,38 @@ test("processes a computer attack against the human gameboard", () => {
 
   randomSpy.mockRestore();
 });
+
+test("reports no winner when both fleets are still afloat", () => {
+  const game = createGame();
+
+  expect(game.getWinner()).toBe(null);
+});
+
+test("reports the human as the winner when the computer fleet sinks", () => {
+  const game = createGame();
+
+  game.humanAttack([5, 5]);
+  game.humanAttack([5, 6]);
+
+  expect(game.getWinner()).toBe("human");
+});
+
+test("reports the computer as the winner when the human fleet sinks", () => {
+  const game = createGame();
+
+  const randomSpy = jest
+    .spyOn(Math, "random")
+    // First attack: [0, 0]
+    .mockReturnValueOnce(0)
+    .mockReturnValueOnce(0)
+    // Second attack: [0, 1]
+    .mockReturnValueOnce(0)
+    .mockReturnValueOnce(0.1);
+
+  game.computerAttack();
+  game.computerAttack();
+
+  expect(game.getWinner()).toBe("computer");
+
+  randomSpy.mockRestore();
+});
