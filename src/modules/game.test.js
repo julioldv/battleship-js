@@ -1,3 +1,4 @@
+import { jest } from "@jest/globals";
 import { createGame } from "./game.js";
 
 test("a new game sets up both players with ships", () => {
@@ -21,4 +22,19 @@ test("processes a human attack against the computer gameboard", () => {
   ]);
 
   expect(game.humanPlayer.gameboard.getMissedAttacks()).toHaveLength(0);
+});
+
+test("processes a computer attack against the human gameboard", () => {
+  const game = createGame();
+
+  const randomSpy = jest
+    .spyOn(Math, "random")
+    .mockReturnValueOnce(0.4)
+    .mockReturnValueOnce(0.7);
+
+  game.computerAttack();
+
+  expect(game.humanPlayer.gameboard.getMissedAttacks()).toContainEqual([4, 7]);
+
+  randomSpy.mockRestore();
 });

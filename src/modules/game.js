@@ -11,10 +11,15 @@ function createGame() {
     return humanPlayer.attack(computerPlayer.gameboard, coordinates);
   };
 
+  const computerAttack = function () {
+    computerPlayer.randomAttack(humanPlayer.gameboard);
+  };
+
   return {
     humanPlayer,
     computerPlayer,
     humanAttack,
+    computerAttack,
   };
 }
 
