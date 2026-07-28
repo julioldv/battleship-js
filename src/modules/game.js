@@ -42,11 +42,12 @@ function createGame() {
   };
 
   const playRound = function (coordinates) {
-    if (getWinner() !== null) return;
+    if (!isPlacementComplete()) return false;
+    if (getWinner() !== null) return false;
 
     const wasAccepted = humanAttack(coordinates);
 
-    if (!wasAccepted) return;
+    if (!wasAccepted) return false;
 
     if (getWinner() === null) {
       computerAttack();

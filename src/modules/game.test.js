@@ -133,15 +133,29 @@ test("reports the computer as the winner when the human fleet sinks", () => {
   expect(game.getWinner()).toBe("computer");
 });
 
+test("does not play a round before human fleet placement is complete", () => {
+  const game = createGame();
+
+  const coordinates = findEmptyCell(game.computerPlayer.gameboard);
+
+  const wasPlayed = game.playRound(coordinates);
+
+  expect(wasPlayed).toBe(false);
+  expect(game.computerPlayer.gameboard.wasAttacked(coordinates)).toBe(false);
+  expect(game.humanPlayer.gameboard.getMissedAttacks()).toHaveLength(0);
+});
+
 test("plays a complete round after a valid human attack", () => {
   const game = createGame();
+
+  placeCompleteHumanFleet(game);
+
+  const coordinates = findEmptyCell(game.computerPlayer.gameboard);
 
   const randomSpy = jest
     .spyOn(Math, "random")
     .mockReturnValueOnce(0.4)
     .mockReturnValueOnce(0.7);
-
-  const coordinates = findEmptyCell(game.computerPlayer.gameboard);
 
   const wasPlayed = game.playRound(coordinates);
 
