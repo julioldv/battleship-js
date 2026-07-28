@@ -138,6 +138,12 @@ test("reports false while at least one ship is still afloat", () => {
   expect(gameboard.areAllShipsSunk()).toBe(false);
 });
 
+test("an empty gameboard does not report all ships as sunk", () => {
+  const gameboard = createGameboard();
+
+  expect(gameboard.areAllShipsSunk()).toBe(false);
+});
+
 test("reports true when all ships have sunk", () => {
   const gameboard = createGameboard();
 

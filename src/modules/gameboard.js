@@ -70,7 +70,7 @@ function createGameboard() {
   };
 
   const areAllShipsSunk = function () {
-    return ships.every((ship) => ship.isSunk());
+    return ships.length > 0 && ships.every((ship) => ship.isSunk());
   };
 
   return {
