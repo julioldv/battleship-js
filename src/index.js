@@ -34,15 +34,9 @@ const renderGame = function () {
 };
 
 bindBoardAttack(computerBoardElement, (coordinates) => {
-  if (game.getWinner() !== null) return;
+  const wasPlayed = game.playRound(coordinates);
 
-  const wasAccepted = game.humanAttack(coordinates);
-
-  if (!wasAccepted) return;
-
-  if (game.getWinner() === null) {
-    game.computerAttack();
-  }
+  if (!wasPlayed) return;
 
   renderGame();
 });

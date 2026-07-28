@@ -73,3 +73,24 @@ test("reports the computer as the winner when the human fleet sinks", () => {
 
   randomSpy.mockRestore();
 });
+
+test("plays a complete round after a valid human attack", () => {
+  const game = createGame();
+
+  const randomSpy = jest
+    .spyOn(Math, "random")
+    .mockReturnValueOnce(0.4)
+    .mockReturnValueOnce(0.7);
+
+  const wasPlayed = game.playRound([1, 1]);
+
+  expect(wasPlayed).toBe(true);
+
+  expect(game.computerPlayer.gameboard.getMissedAttacks()).toContainEqual([
+    1, 1,
+  ]);
+
+  expect(game.humanPlayer.gameboard.getMissedAttacks()).toContainEqual([4, 7]);
+
+  randomSpy.mockRestore();
+});

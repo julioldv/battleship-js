@@ -25,12 +25,27 @@ function createGame() {
     return null;
   };
 
+  const playRound = function (coordinates) {
+    if (getWinner() !== null) return;
+
+    const wasAccepted = humanAttack(coordinates);
+
+    if (!wasAccepted) return;
+
+    if (getWinner() === null) {
+      computerAttack();
+    }
+
+    return true;
+  };
+
   return {
     humanPlayer,
     computerPlayer,
     humanAttack,
     computerAttack,
     getWinner,
+    playRound,
   };
 }
 
