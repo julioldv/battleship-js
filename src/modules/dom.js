@@ -26,4 +26,17 @@ const renderBoard = function (gameboard, container, showShips) {
   }
 };
 
-export { renderBoard };
+const bindBoardAttack = function (container, handler) {
+  container.addEventListener("click", (event) => {
+    const cell = event.target.closest(".cell");
+
+    if (!cell || !container.contains(cell)) return;
+
+    const row = Number(cell.dataset.row);
+    const column = Number(cell.dataset.column);
+
+    handler([row, column]);
+  });
+};
+
+export { renderBoard, bindBoardAttack };
