@@ -27,6 +27,20 @@ const sinkFleet = function (targetGameboard, attack) {
   }
 };
 
+const findEmptyCell = function (gameboard) {
+  for (let row = 0; row < 10; row++) {
+    for (let column = 0; column < 10; column++) {
+      const coordinates = [row, column];
+
+      if (gameboard.getCell(coordinates) === null) {
+        return coordinates;
+      }
+    }
+  }
+
+  throw new Error("The gameboard has no empty cells.");
+};
+
 test("a new game sets up complete fleets for both players", () => {
   const game = createGame();
 
@@ -37,12 +51,14 @@ test("a new game sets up complete fleets for both players", () => {
 test("processes a human attack against the computer gameboard", () => {
   const game = createGame();
 
-  const wasAccepted = game.humanAttack([0, 0]);
+  const coordinates = findEmptyCell(game.computerPlayer.gameboard);
+
+  const wasAccepted = game.humanAttack(coordinates);
 
   expect(wasAccepted).toBe(true);
-  expect(game.computerPlayer.gameboard.getMissedAttacks()).toContainEqual([
-    0, 0,
-  ]);
+  expect(game.computerPlayer.gameboard.getMissedAttacks()).toContainEqual(
+    coordinates,
+  );
 
   expect(game.humanPlayer.gameboard.getMissedAttacks()).toHaveLength(0);
 });
@@ -94,13 +110,15 @@ test("plays a complete round after a valid human attack", () => {
     .mockReturnValueOnce(0.4)
     .mockReturnValueOnce(0.7);
 
-  const wasPlayed = game.playRound([0, 0]);
+  const coordinates = findEmptyCell(game.computerPlayer.gameboard);
+
+  const wasPlayed = game.playRound(coordinates);
 
   expect(wasPlayed).toBe(true);
 
-  expect(game.computerPlayer.gameboard.getMissedAttacks()).toContainEqual([
-    0, 0,
-  ]);
+  expect(game.computerPlayer.gameboard.getMissedAttacks()).toContainEqual(
+    coordinates,
+  );
 
   expect(game.humanPlayer.gameboard.getMissedAttacks()).toContainEqual([4, 7]);
 

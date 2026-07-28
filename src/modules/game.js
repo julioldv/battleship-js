@@ -28,37 +28,25 @@ const humanFleet = [
   },
 ];
 
-const computerFleet = [
-  {
-    length: 5,
-    coordinates: [0, 9],
-    orientation: "vertical",
-  },
-  {
-    length: 4,
-    coordinates: [1, 1],
-    orientation: "horizontal",
-  },
-  {
-    length: 3,
-    coordinates: [4, 3],
-    orientation: "vertical",
-  },
-  {
-    length: 3,
-    coordinates: [7, 5],
-    orientation: "horizontal",
-  },
-  {
-    length: 2,
-    coordinates: [5, 5],
-    orientation: "horizontal",
-  },
-];
+const fleetLengths = [5, 4, 3, 3, 2];
 
 const placeFleet = function (gameboard, fleet) {
   fleet.forEach(({ length, coordinates, orientation }) => {
     gameboard.placeShip(length, coordinates, orientation);
+  });
+};
+
+const placeRandomFleet = function (gameboard) {
+  fleetLengths.forEach((length) => {
+    let wasPlaced = false;
+
+    while (!wasPlaced) {
+      const row = Math.floor(Math.random() * 10);
+      const column = Math.floor(Math.random() * 10);
+      const orientation = Math.random() < 0.5 ? "horizontal" : "vertical";
+
+      wasPlaced = gameboard.placeShip(length, [row, column], orientation);
+    }
   });
 };
 
@@ -67,7 +55,7 @@ function createGame() {
   const computerPlayer = createPlayer();
 
   placeFleet(humanPlayer.gameboard, humanFleet);
-  placeFleet(computerPlayer.gameboard, computerFleet);
+  placeRandomFleet(computerPlayer.gameboard);
 
   const humanAttack = function (coordinates) {
     return humanPlayer.attack(computerPlayer.gameboard, coordinates);
