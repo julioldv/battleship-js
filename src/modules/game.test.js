@@ -1,14 +1,37 @@
 import { jest } from "@jest/globals";
 import { createGame } from "./game.js";
 
-test("a new game sets up both players with ships", () => {
+const countOccupiedCells = function (gameboard) {
+  let occupiedCells = 0;
+
+  for (let row = 0; row < 10; row++) {
+    for (let column = 0; column < 10; column++) {
+      if (gameboard.getCell([row, column]) !== null) {
+        occupiedCells++;
+      }
+    }
+  }
+
+  return occupiedCells;
+};
+
+const sinkFleet = function (targetGameboard, attack) {
+  for (let row = 0; row < 10; row++) {
+    for (let column = 0; column < 10; column++) {
+      const coordinates = [row, column];
+
+      if (targetGameboard.getCell(coordinates) !== null) {
+        attack(coordinates);
+      }
+    }
+  }
+};
+
+test("a new game sets up complete fleets for both players", () => {
   const game = createGame();
 
-  const humanShip = game.humanPlayer.gameboard.getCell([0, 0]);
-  const computerShip = game.computerPlayer.gameboard.getCell([5, 5]);
-
-  expect(humanShip).not.toBe(null);
-  expect(computerShip).not.toBe(null);
+  expect(countOccupiedCells(game.humanPlayer.gameboard)).toBe(17);
+  expect(countOccupiedCells(game.computerPlayer.gameboard)).toBe(17);
 });
 
 test("processes a human attack against the computer gameboard", () => {
@@ -48,8 +71,7 @@ test("reports no winner when both fleets are still afloat", () => {
 test("reports the human as the winner when the computer fleet sinks", () => {
   const game = createGame();
 
-  game.humanAttack([5, 5]);
-  game.humanAttack([5, 6]);
+  sinkFleet(game.computerPlayer.gameboard, game.humanAttack);
 
   expect(game.getWinner()).toBe("human");
 });
@@ -57,21 +79,11 @@ test("reports the human as the winner when the computer fleet sinks", () => {
 test("reports the computer as the winner when the human fleet sinks", () => {
   const game = createGame();
 
-  const randomSpy = jest
-    .spyOn(Math, "random")
-    // First attack: [0, 0]
-    .mockReturnValueOnce(0)
-    .mockReturnValueOnce(0)
-    // Second attack: [0, 1]
-    .mockReturnValueOnce(0)
-    .mockReturnValueOnce(0.1);
-
-  game.computerAttack();
-  game.computerAttack();
+  sinkFleet(game.humanPlayer.gameboard, (coordinates) =>
+    game.computerPlayer.attack(game.humanPlayer.gameboard, coordinates),
+  );
 
   expect(game.getWinner()).toBe("computer");
-
-  randomSpy.mockRestore();
 });
 
 test("plays a complete round after a valid human attack", () => {
@@ -82,12 +94,12 @@ test("plays a complete round after a valid human attack", () => {
     .mockReturnValueOnce(0.4)
     .mockReturnValueOnce(0.7);
 
-  const wasPlayed = game.playRound([1, 1]);
+  const wasPlayed = game.playRound([0, 0]);
 
   expect(wasPlayed).toBe(true);
 
   expect(game.computerPlayer.gameboard.getMissedAttacks()).toContainEqual([
-    1, 1,
+    0, 0,
   ]);
 
   expect(game.humanPlayer.gameboard.getMissedAttacks()).toContainEqual([4, 7]);
