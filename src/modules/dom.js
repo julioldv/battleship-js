@@ -26,7 +26,7 @@ const renderBoard = function (gameboard, container, showShips) {
   }
 };
 
-const bindBoardAttack = function (container, handler) {
+const bindBoardClick = function (container, handler) {
   container.addEventListener("click", (event) => {
     const cell = event.target.closest(".cell");
 
@@ -39,4 +39,4 @@ const bindBoardAttack = function (container, handler) {
   });
 };
 
-export { renderBoard, bindBoardAttack };
+export { renderBoard, bindBoardClick };

@@ -21,3 +21,13 @@
 .miss {
   background: lightblue;
 }
+
+#placement-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+#orientation-select {
+  padding: 0.4rem;
+}

@@ -9,6 +9,14 @@
     <main class="game">
       <h1>Battleship</h1>
       <p id="game-status" aria-live="polite">Your turn</p>
+      <div id="placement-controls">
+        <label for="orientation-select">Ship orientation:</label>
+
+        <select id="orientation-select">
+          <option value="horizontal">Horizontal</option>
+          <option value="vertical">Vertical</option>
+        </select>
+      </div>
       <section>
         <h2>Your fleet</h2>
         <div id="human-board" class="board"></div>
