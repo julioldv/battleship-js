@@ -41,10 +41,39 @@ const findEmptyCell = function (gameboard) {
   throw new Error("The gameboard has no empty cells.");
 };
 
-test("a new game sets up complete fleets for both players", () => {
+const placeCompleteHumanFleet = function (game) {
+  const placements = [
+    {
+      coordinates: [0, 0],
+      orientation: "horizontal",
+    },
+    {
+      coordinates: [2, 0],
+      orientation: "vertical",
+    },
+    {
+      coordinates: [3, 3],
+      orientation: "horizontal",
+    },
+    {
+      coordinates: [5, 7],
+      orientation: "vertical",
+    },
+    {
+      coordinates: [9, 8],
+      orientation: "horizontal",
+    },
+  ];
+
+  placements.forEach(({ coordinates, orientation }) => {
+    game.placeHumanShip(coordinates, orientation);
+  });
+};
+
+test("a new game starts with an empty human board and a complete computer fleet", () => {
   const game = createGame();
 
-  expect(countOccupiedCells(game.humanPlayer.gameboard)).toBe(17);
+  expect(countOccupiedCells(game.humanPlayer.gameboard)).toBe(0);
   expect(countOccupiedCells(game.computerPlayer.gameboard)).toBe(17);
 });
 
@@ -95,6 +124,8 @@ test("reports the human as the winner when the computer fleet sinks", () => {
 test("reports the computer as the winner when the human fleet sinks", () => {
   const game = createGame();
 
+  placeCompleteHumanFleet(game);
+
   sinkFleet(game.humanPlayer.gameboard, (coordinates) =>
     game.computerPlayer.attack(game.humanPlayer.gameboard, coordinates),
   );
@@ -123,4 +154,42 @@ test("plays a complete round after a valid human attack", () => {
   expect(game.humanPlayer.gameboard.getMissedAttacks()).toContainEqual([4, 7]);
 
   randomSpy.mockRestore();
+});
+
+test("reports the first human ship that needs to be placed", () => {
+  const game = createGame();
+
+  expect(game.getNextShipLength()).toBe(5);
+});
+
+test("places the next human ship and advances the fleet sequence", () => {
+  const game = createGame();
+
+  const wasPlaced = game.placeHumanShip([0, 0], "horizontal");
+
+  expect(wasPlaced).toBe(true);
+  expect(countOccupiedCells(game.humanPlayer.gameboard)).toBe(5);
+  expect(game.getNextShipLength()).toBe(4);
+});
+
+test("does not advance the fleet sequence after an invalid placement", () => {
+  const game = createGame();
+
+  const wasPlaced = game.placeHumanShip([0, 8], "horizontal");
+
+  expect(wasPlaced).toBe(false);
+  expect(countOccupiedCells(game.humanPlayer.gameboard)).toBe(0);
+  expect(game.getNextShipLength()).toBe(5);
+});
+
+test("reports when the human fleet placement is complete", () => {
+  const game = createGame();
+
+  expect(game.isPlacementComplete()).toBe(false);
+
+  placeCompleteHumanFleet(game);
+
+  expect(game.isPlacementComplete()).toBe(true);
+  expect(game.getNextShipLength()).toBe(null);
+  expect(countOccupiedCells(game.humanPlayer.gameboard)).toBe(17);
 });

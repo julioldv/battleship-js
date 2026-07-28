@@ -1,40 +1,6 @@
 import { createPlayer } from "./player.js";
 
-const humanFleet = [
-  {
-    length: 5,
-    coordinates: [0, 0],
-    orientation: "horizontal",
-  },
-  {
-    length: 4,
-    coordinates: [2, 0],
-    orientation: "vertical",
-  },
-  {
-    length: 3,
-    coordinates: [3, 3],
-    orientation: "horizontal",
-  },
-  {
-    length: 3,
-    coordinates: [5, 7],
-    orientation: "vertical",
-  },
-  {
-    length: 2,
-    coordinates: [9, 8],
-    orientation: "horizontal",
-  },
-];
-
 const fleetLengths = [5, 4, 3, 3, 2];
-
-const placeFleet = function (gameboard, fleet) {
-  fleet.forEach(({ length, coordinates, orientation }) => {
-    gameboard.placeShip(length, coordinates, orientation);
-  });
-};
 
 const placeRandomFleet = function (gameboard) {
   fleetLengths.forEach((length) => {
@@ -53,8 +19,8 @@ const placeRandomFleet = function (gameboard) {
 function createGame() {
   const humanPlayer = createPlayer();
   const computerPlayer = createPlayer();
+  let nextHumanShipIndex = 0;
 
-  placeFleet(humanPlayer.gameboard, humanFleet);
   placeRandomFleet(computerPlayer.gameboard);
 
   const humanAttack = function (coordinates) {
@@ -89,6 +55,31 @@ function createGame() {
     return true;
   };
 
+  const getNextShipLength = function () {
+    return fleetLengths[nextHumanShipIndex] ?? null;
+  };
+
+  const placeHumanShip = function (coordinates, orientation) {
+    const length = getNextShipLength();
+
+    if (length === null) return false;
+
+    const wasPlaced = humanPlayer.gameboard.placeShip(
+      length,
+      coordinates,
+      orientation,
+    );
+
+    if (!wasPlaced) return false;
+
+    nextHumanShipIndex++;
+    return true;
+  };
+
+  const isPlacementComplete = function () {
+    return nextHumanShipIndex === fleetLengths.length;
+  };
+
   return {
     humanPlayer,
     computerPlayer,
@@ -96,6 +87,9 @@ function createGame() {
     computerAttack,
     getWinner,
     playRound,
+    getNextShipLength,
+    placeHumanShip,
+    isPlacementComplete,
   };
 }
 
