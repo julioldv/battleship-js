@@ -9,3 +9,15 @@
   background: white;
   cursor: pointer;
 }
+
+.ship {
+  background: gray;
+}
+
+.hit {
+  background: crimson;
+}
+
+.miss {
+  background: lightblue;
+}
