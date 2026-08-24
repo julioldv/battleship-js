@@ -1,31 +1,82 @@
-# Webpack Template
+# Battleship
 
-A reusable webpack template for modern JavaScript projects.
+A browser-based implementation of the classic Battleship game, built with vanilla JavaScript
+
+The project focuses on test-driven development, object design, separation of game logic from DOM manipulation, and coordinating multiple modules in a complete interactive application.
 
 ## Features
 
-- Webpack configured with separate development and production configurations
-- Native ES Modules (ESM)
-- ESLint with recommended rules and browser/Jest globals
-- Prettier for consistent code formatting
-- Modern Normalize CSS reset
-- Jest configured for unit testing with native ESM
-- Format on save support for VS Code
-- Organized project structure (`assets`, `components`, `modules`)
+- Interactive 10×10 Battleship boards
+- Player fleet placement
+- Horizontal and vertical ship orientation
+- Full fleet with ships of lengths 5, 4, 3, 3, and 2
+- Placement validation for:
+  - Board boundaries
+  - Overlapping ships
 
-## Project Structure
+- Randomized computer fleet placement
+- Random computer attacks
+- Prevention of repeated attacks
+- Hit and miss tracking
+- Automatic turn handling
+- Win detection when an entire fleet is sunk
+- Hidden enemy ships until they are hit
 
-```text
-src/
-├── assets/
-├── components/
-├── modules/
-├── index.js
-├── styles.css
-└── template.html
+## Built With
+
+- HTML
+- CSS
+- JavaScript
+- Webpack
+- Jest
+- ESLint
+- Prettier
+
+## Architecture
+
+The game is divided into modules with separate responsibilities:
+
+- **Ship** — tracks ship length, received hits, and whether the ship has sunk.
+- **Gameboard** — manages ship placement, attacks, misses, and fleet state.
+- **Player** — owns a gameboard and handles player or computer attacks.
+- **Game controller** — coordinates setup, turns, fleet placement, and win conditions.
+- **DOM module** — renders gameboards and translates user interaction into game actions.
+
+Game logic is kept separate from DOM manipulation so that the core behavior can be tested independently of the user interface.
+
+## Testing
+
+The core game logic was developed using Jest and a test-driven approach.
+
+Tests cover behavior such as:
+
+- Ship hits and sinking
+- Horizontal and vertical ship placement
+- Out-of-bounds placement
+- Ship overlap prevention
+- Hits and misses
+- Repeated attacks
+- Fleet destruction
+- Independent player gameboards
+- Computer attacks
+- Game setup and turn flow
+- Win conditions
+- Human fleet placement
+
+Run the test suite with:
+
+```bash
+npm test
 ```
 
-## Getting Started
+## Running Locally
+
+Clone the repository:
+
+```bash
+git clone YOUR_REPOSITORY_URL
+cd battleship
+```
 
 Install dependencies:
 
@@ -45,34 +96,31 @@ Create a production build:
 npm run build
 ```
 
-Run unit tests:
+## What I Learned
 
-```bash
-npm test
-```
+This project helped me practice designing an application by breaking a larger problem into smaller objects with clear responsibilities.
 
-Check code quality:
+Some of the main concepts I worked with were:
 
-```bash
-npm run lint
-```
+- Test-driven development
+- Factory functions and closures
+- Encapsulation and public interfaces
+- Separation of concerns
+- Two-dimensional arrays and coordinate-based state
+- Delegation between objects
+- Game state and turn management
+- Event delegation
+- DOM rendering based on application state
+- Incremental refactoring
 
-Format all files:
+One of the main lessons from the project was to build the simplest working behavior first and allow the architecture to evolve as new requirements introduced real needs.
 
-```bash
-npm run format
-```
+## Future Improvements
 
-Verify formatting:
+Possible improvements include:
 
-```bash
-npm run format:check
-```
-
-## Included Tools
-
-- Webpack
-- ESLint
-- Prettier
-- Jest
-- Modern Normalize
+- Additional responsive and visual polish
+- Improved feedback during ship placement
+- Restart / new game functionality
+- Smarter computer targeting after a successful hit
+- Drag-and-drop ship placement
