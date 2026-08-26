@@ -74,8 +74,8 @@ npm test
 Clone the repository:
 
 ```bash
-git clone YOUR_REPOSITORY_URL
-cd battleship
+git clone https://github.com/julioldv/battleship-js.git
+cd battleship-js
 ```
 
 Install dependencies:
