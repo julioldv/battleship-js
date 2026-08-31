@@ -4,6 +4,10 @@ A browser-based implementation of the classic Battleship game, built with vanill
 
 The project focuses on test-driven development, object design, separation of game logic from DOM manipulation, and coordinating multiple modules in a complete interactive application.
 
+## Live Demo
+
+[Play Battleship](https://julioldv.github.io/battleship-js/)
+
 ## Features
 
 - Interactive 10×10 Battleship boards
